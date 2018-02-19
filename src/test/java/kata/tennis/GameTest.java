@@ -23,6 +23,16 @@ public class GameTest {
 	}
 
 	@Test
+	public void should_have_0_A_score_at_new_game() {
+		// Then
+		String score = game.printScore();
+		Optional<Player> winner = game.getWinner();
+
+		assertEquals("0/A", score);
+		assertFalse(winner.isPresent());
+	}
+
+	@Test
 	public void should_have_15_0_score_when_server_scores_once() {
 		// When
 		game.serverScores();
