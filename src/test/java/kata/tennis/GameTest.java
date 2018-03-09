@@ -88,7 +88,7 @@ public class GameTest {
 	}
 
 	@Test
-	public void should_have_40_A_score_when_both_players_score_three_times() {
+	public void should_have_equality_when_both_players_score_less_than_four_times_and_the_same_number_of_times() {
 		// When
 		game.serverScores();
 		game.receiverScores();
@@ -106,7 +106,7 @@ public class GameTest {
 	}
 
 	@Test
-	public void should_have_deuce_when_both_players_score_four_times() {
+	public void should_have_deuce_when_both_players_score_at_least_four_times_and_the_same_number_of_times() {
 		// When
 		game.serverScores();
 		game.receiverScores();
@@ -126,7 +126,7 @@ public class GameTest {
 	}
 
 	@Test
-	public void should_have_advantage_for_server_when_server_scores_four_times_and_receiver_scores_three_times() {
+	public void should_have_advantage_when_both_player_score_at_least_three_times_and_one_lead_the_other_by_one_point() {
 		// When
 		game.serverScores();
 		game.receiverScores();
@@ -145,29 +145,10 @@ public class GameTest {
 	}
 
 	@Test
-	public void should_have_a_winner_when_server_scores_four_times_in_a_raw() {
+	public void should_have_a_winner_when_one_player_scores_at_least_four_times_and_lead_the_other_by_two_points() {
 		// When
 		game.serverScores();
 		game.serverScores();
-		game.serverScores();
-		game.serverScores();
-
-		// Then
-		String score = game.printScore();
-		Optional<Player> winner = game.getWinner();
-
-		assertTrue(winner.isPresent());
-		assertEquals(server, winner.get());
-		assertEquals(server.getName() + " won", score);
-	}
-
-	@Test
-	public void should_have_a_winner_when_both_player_score_at_least_two_times_and_have_a_two_point_gap() {
-		// When
-		game.serverScores();
-		game.serverScores();
-		game.serverScores();
-		game.receiverScores();
 		game.receiverScores();
 		game.receiverScores();
 		game.receiverScores();
