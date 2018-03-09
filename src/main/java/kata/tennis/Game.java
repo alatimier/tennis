@@ -15,19 +15,19 @@ public class Game {
 		this.receiver = receiver;
 	}
 
-	private void assertNoWinner() {
+	private void assertGameNotOver() {
 		if (getWinner().isPresent()) {
 			throw new IllegalStateException("Game is over");
 		}
 	}
 
 	public void serverScores() {
-		assertNoWinner();
+		assertGameNotOver();
 		serverScore++;
 	}
 
 	public void receiverScores() {
-		assertNoWinner();
+		assertGameNotOver();
 		receiverScore++;
 	}
 
@@ -37,9 +37,9 @@ public class Game {
 			return winner.get().getName() + " won";
 		}
 
-		Optional<Player> advantage = getAdvantage();
-		if (advantage.isPresent()) {
-			return "Advantage " + advantage.get().getName();
+		Optional<Player> advantagePlayer = getAdvantagePlayer();
+		if (advantagePlayer.isPresent()) {
+			return "Advantage " + advantagePlayer.get().getName();
 		}
 
 		if (serverScore == receiverScore) {
@@ -54,31 +54,17 @@ public class Game {
 	}
 
 	public Optional<Player> getWinner() {
-		if (hasWon(serverScore, receiverScore)) {
-			return Optional.of(server);
-		}
-		if (hasWon(receiverScore, serverScore)) {
-			return Optional.of(receiver);
+		if ((serverScore >= 4 || receiverScore >= 4) && Math.abs(serverScore - receiverScore) >= 2) {
+			return serverScore > receiverScore ? Optional.of(server) : Optional.of(receiver);
 		}
 		return Optional.empty();
 	}
 
-	private boolean hasWon(int score, int opponentScore) {
-		return score > 3 && score - opponentScore >= 2;
-	}
-
-	private Optional<Player> getAdvantage() {
-		if (hasAdvantage(serverScore, receiverScore)) {
-			return Optional.of(server);
-		}
-		if (hasAdvantage(receiverScore, serverScore)) {
-			return Optional.of(receiver);
+	private Optional<Player> getAdvantagePlayer() {
+		if (serverScore >= 3 && receiverScore >= 3 && Math.abs(serverScore - receiverScore) == 1) {
+			return serverScore > receiverScore ? Optional.of(server) : Optional.of(receiver);
 		}
 		return Optional.empty();
-	}
-
-	private boolean hasAdvantage(int score, int opponentScore) {
-		return score > 3 && score - opponentScore == 1;
 	}
 
 	private String translateScore(int score) {
